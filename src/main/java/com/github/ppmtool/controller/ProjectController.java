@@ -1,15 +1,13 @@
 package com.github.ppmtool.controller;
 
 import com.github.ppmtool.domain.Project;
+import com.github.ppmtool.domain.dto.ProjectResponseDto;
 import com.github.ppmtool.service.ProjectService;
 import com.github.ppmtool.validation.ValidationHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,7 +20,7 @@ public class ProjectController {
         this.service = service;
     }
 
-    @PostMapping
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity<?> create(
             @Valid @RequestBody Project project,
             BindingResult bindingResult
@@ -32,6 +30,24 @@ public class ProjectController {
 
         Project newProject = service.saveOrUpdate(project);
         return new ResponseEntity<>(newProject, HttpStatus.CREATED);
+    }
+
+    @GetMapping("{projectId}")
+    public ResponseEntity<?> getProjectById(@PathVariable String projectId) {
+        Project project = service.findProjectByIdentifier(projectId);
+        return new ResponseEntity<>(project, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<Project>> getAllProjects() {
+        Iterable<Project> projects = service.findAllProjects();
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{projectId}")
+    public ResponseEntity<?> deleteProject(@PathVariable String projectId) {
+        service.deleteProjectById(projectId);
+        return new ResponseEntity<>(new ProjectResponseDto(projectId, "Is deleted"), HttpStatus.OK);
     }
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Data
@@ -25,9 +26,9 @@ public class Project {
     @NotBlank(message = "Project description is required")
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime startDate;
+    private Date startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime endDate;
+    private Date endDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

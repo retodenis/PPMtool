@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createProject } from '../../actions/projectActions';
 import ProjectErrors from './ProjectErrors';
+import classnames from 'classnames';
 
 class AddProject extends Component {
     constructor() {
@@ -59,7 +60,7 @@ class AddProject extends Component {
                     <div className="form-group">
                       <input
                         type="text"
-                        className="form-control form-control-lg "
+                        className={classnames("form-control form-control-lg ", {"is-invalid": errors.projectName})}
                         placeholder="Project Name"
                         name="projectName"
                         value={this.state.projectName}
@@ -70,7 +71,7 @@ class AddProject extends Component {
                     <div className="form-group">
                       <input
                         type="text"
-                        className="form-control form-control-lg"
+                        className={classnames("form-control form-control-lg ", {"is-invalid": errors.projectIdentifier})}
                         placeholder="Unique Project ID"
                         name="projectIdentifier"
                         value={this.state.projectIdentifier}
@@ -80,7 +81,7 @@ class AddProject extends Component {
                     </div>
                     <div className="form-group">
                       <textarea
-                        className="form-control form-control-lg"
+                        className={classnames("form-control form-control-lg ", {"is-invalid": errors.description})}
                         placeholder="Project Description"
                         name="description"
                         value={this.state.description}
@@ -103,7 +104,7 @@ class AddProject extends Component {
                       <input
                         type="date"
                         className="form-control form-control-lg"
-                        name="end_date"
+                        name="endDate"
                         value={this.state.endDate}
                         onChange={this.onChange}
                       />

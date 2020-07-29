@@ -8,7 +8,7 @@ const ProjectErrors = (props) => {
     ) : '';
 
     return (
-        <div>{errorList}</div>
+        <div className="invalid-feedback">{errorList}</div>
     )
 }
 

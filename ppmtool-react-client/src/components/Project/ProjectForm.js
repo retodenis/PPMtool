@@ -15,6 +15,7 @@ class ProjectForm extends Component {
   render() {
     const errors = this.props.errors;
     const buttonLabel = this.props.buttonLabel;
+
     const { projectName, projectIdentifier, description, startDate, endDate } = this.props.project;
 
     return (
@@ -64,7 +65,7 @@ class ProjectForm extends Component {
                       type="date"
                       className="form-control form-control-lg"
                       name="startDate"
-                      value={startDate}
+                      value={startDate ? startDate : ""}
                       onChange={this.onChange}
                     />
                   </div>
@@ -74,7 +75,7 @@ class ProjectForm extends Component {
                       type="date"
                       className="form-control form-control-lg"
                       name="endDate"
-                      value={endDate}
+                      value={endDate ? endDate : ""}
                       onChange={this.onChange}
                     />
                   </div>

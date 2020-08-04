@@ -1,10 +1,48 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getProject } from '../../actions/projectActions';
+import { getProject, createProject } from '../../actions/projectActions';
 import ProjectForm from './ProjectForm';
 
 class UpdateProject extends Component {
+  constructor() {
+    super()
+
+    this.state = {
+      id: "",
+      projectName: "",
+      projectIdentifier: "",
+      description: "",
+      startDate: "",
+      endDate: "",
+      errors: {}
+    };
+
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+    
+    const {
+      id,
+      projectName,
+      projectIdentifier,
+      description,
+      startDate,
+      endDate
+    } = nextProps.project;
+
+    this.setState({
+      id,
+      projectName,
+      projectIdentifier,
+      description,
+      startDate,
+      endDate
+    });
+  }
 
   componentDidMount() {
     const { id } = this.props.match.params;
@@ -17,40 +55,45 @@ class UpdateProject extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const newProject = {
+
+    const updateProject = {
+      id: this.state.id,
       projectName: this.state.projectName,
       projectIdentifier: this.state.projectIdentifier,
       description: this.state.description,
       startDate: this.state.startDate,
       endDate: this.state.endDate
     };
-    this.props.createProject(newProject, this.props.history);
+    
+    this.props.createProject(updateProject, this.props.history);
   }
 
   render() {
     const { errors } = this.state;
 
     return (
-      <ProjectForm
-        errors={errors}
-        buttonLabel='Update Project form'
-        project={this.state}
-        onSubmit={this.onSubmit}
-        onChange={this.onChange} />
+        <ProjectForm 
+          errors={errors}
+          buttonLabel='Update Project form'
+          project={this.state}
+          onSubmit={this.onSubmit}
+          onChange={this.onChange}/>
     );
   }
 }
 
 UpdateProject.propTypes = {
   getProject: PropTypes.func.isRequired,
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  project: state.project.project
+  project: state.project.project,
+  errors: state.errors
 });
 
 export default connect(
   mapStateToProps,
-  { getProject }
+  { getProject, createProject }
 )(UpdateProject);

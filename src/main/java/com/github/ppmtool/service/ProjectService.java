@@ -1,5 +1,6 @@
 package com.github.ppmtool.service;
 
+import com.github.ppmtool.domain.Backlog;
 import com.github.ppmtool.domain.Project;
 import com.github.ppmtool.exceptions.ProjectIdException;
 import com.github.ppmtool.repository.ProjectRepository;
@@ -15,11 +16,19 @@ public class ProjectService {
     }
 
     public Project saveOrUpdate(Project project) {
+        final String projectIdentifier = project.getProjectIdentifier().toUpperCase();
         try {
-            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            project.setProjectIdentifier(projectIdentifier);
+
+            if(project.getId() == null) {
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+            }
+
             return repository.save(project);
         } catch (DataIntegrityViolationException ex) {
-            throw new ProjectIdException("Project ID: " + project.getProjectIdentifier() + " already exists");
+            throw new ProjectIdException("Project ID: " + projectIdentifier + " already exists");
         }
     }
 

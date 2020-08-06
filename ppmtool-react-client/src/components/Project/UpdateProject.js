@@ -77,13 +77,15 @@ class UpdateProject extends Component {
           buttonLabel='Update Project form'
           project={this.state}
           onSubmit={this.onSubmit}
-          onChange={this.onChange}/>
+          onChange={this.onChange}
+          mode='update'/>
     );
   }
 }
 
 UpdateProject.propTypes = {
   getProject: PropTypes.func.isRequired,
+  createProject: PropTypes.func.isRequired,
   project: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };

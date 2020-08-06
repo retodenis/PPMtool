@@ -17,6 +17,7 @@ class ProjectForm extends Component {
     const buttonLabel = this.props.buttonLabel;
 
     const { projectName, projectIdentifier, description, startDate, endDate } = this.props.project;
+    const mode = this.props.mode === 'update';
 
     return (
       <div>
@@ -46,6 +47,7 @@ class ProjectForm extends Component {
                       name="projectIdentifier"
                       value={projectIdentifier}
                       onChange={this.onChange}
+                      disabled={mode}
                     />
                     <ProjectErrors errors={errors.projectIdentifier} />
                   </div>

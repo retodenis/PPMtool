@@ -24,6 +24,7 @@ public class ProjectService {
                 Backlog backlog = new Backlog();
                 project.setBacklog(backlog);
                 backlog.setProject(project);
+                backlog.setProjectIdentifier(projectIdentifier);
             }
 
             return repository.save(project);

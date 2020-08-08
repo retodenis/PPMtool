@@ -45,6 +45,14 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
+//    @GetMapping("sort")
+//    public ResponseEntity<Iterable<Project>> getAllProjects(
+//            @RequestParam String sortType,
+//            @RequestParam String fieldName) {
+//        Iterable<Project> projects = service.findAllProjectsSort(sortType, fieldName);
+//        return new ResponseEntity<>(projects, HttpStatus.OK);
+//    }
+
     @DeleteMapping("{projectId}")
     public ResponseEntity<?> deleteProject(@PathVariable String projectId) {
         service.deleteProjectById(projectId);

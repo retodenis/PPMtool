@@ -22,8 +22,12 @@ public class ProjectTask {
     @NotBlank(message = "Please include a project suammry")
     private String summary;
     private String acceptanceCriteria;
-    private String status;
-    private Integer priority;
+    @Enumerated(EnumType.STRING)
+    private PTStatus status;
+    @Basic
+    private int priority;
+    @Transient
+    private PTPriority ptPriority;
     private LocalDateTime dueDate;
     @Column(updatable = false)
     private String projectIdentifier;
@@ -34,12 +38,24 @@ public class ProjectTask {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
     @JsonIgnore
+    @ToString.Exclude
     private Backlog backlog;
+
+    @PostLoad
+    private void postLoad() {
+        if (priority > 0) {
+            this.ptPriority = PTPriority.of(priority);
+        }
+    }
 
     @PrePersist
     private void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+
+        if (ptPriority != null) {
+            priority = ptPriority.getPriority();
+        }
     }
 
     @PreUpdate

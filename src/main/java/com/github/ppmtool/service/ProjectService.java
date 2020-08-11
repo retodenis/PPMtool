@@ -5,7 +5,6 @@ import com.github.ppmtool.domain.Project;
 import com.github.ppmtool.exceptions.ProjectIdException;
 import com.github.ppmtool.repository.ProjectRepository;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service

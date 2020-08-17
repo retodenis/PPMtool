@@ -85,4 +85,10 @@ public class ProjectTaskService {
 
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(projectIdentifier);
     }
+
+    public ProjectTask findByProjectIdentifierAndProjectSequence
+            (String projectIdentifier, String projectSequence) {
+        return projectTaskRepository.findByProjectIdentifierAndProjectSequence
+                (projectIdentifier, projectSequence);
+    }
 }

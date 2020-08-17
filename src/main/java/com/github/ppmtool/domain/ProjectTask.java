@@ -18,7 +18,7 @@ public class ProjectTask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(updatable = false)
+    @Column(updatable = false, unique = true)
     private String projectSequence;
     @NotNull(message = "Must not be null")
     @NotBlank(message = "Please include a project summary")

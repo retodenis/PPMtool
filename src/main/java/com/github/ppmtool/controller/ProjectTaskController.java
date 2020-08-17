@@ -39,4 +39,14 @@ public class ProjectTaskController {
         return new ResponseEntity<>
                 (projectTaskService.findProjectTasksById(projectIdentifier), HttpStatus.OK);
     }
+
+    @GetMapping("{projectIdentifier}/{projectSequence}")
+    public ResponseEntity<ProjectTask> getProjectTaskBySequence(
+            @PathVariable String projectIdentifier,
+            @PathVariable String projectSequence) {
+        return new ResponseEntity<>
+            (projectTaskService.findByProjectIdentifierAndProjectSequence(
+                    projectIdentifier,
+                    projectSequence), HttpStatus.OK);
+    }
 }

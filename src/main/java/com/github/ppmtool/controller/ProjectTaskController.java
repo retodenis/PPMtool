@@ -22,8 +22,8 @@ public class ProjectTaskController {
 
     @PostMapping("{projectIdentifier}")
     public ResponseEntity<?> addProject(
-            @Valid @RequestBody ProjectTask projectTask,
             @PathVariable String projectIdentifier,
+            @Valid @RequestBody ProjectTask projectTask,
             BindingResult bindingResult) {
 
         if(bindingResult.hasErrors())
@@ -34,5 +34,9 @@ public class ProjectTaskController {
         return new ResponseEntity<>(newProjectTask, HttpStatus.CREATED);
     }
 
-
+    @GetMapping("{projectIdentifier}")
+    public ResponseEntity<Iterable<ProjectTask>> getProjectTasks(@PathVariable String projectIdentifier) {
+        return new ResponseEntity<>
+                (projectTaskService.findProjectTasksById(projectIdentifier), HttpStatus.OK);
+    }
 }

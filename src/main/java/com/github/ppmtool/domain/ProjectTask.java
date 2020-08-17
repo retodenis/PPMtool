@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,7 +20,8 @@ public class ProjectTask {
     private Long id;
     @Column(updatable = false)
     private String projectSequence;
-    @NotBlank(message = "Please include a project suammry")
+    @NotNull(message = "Must not be null")
+    @NotBlank(message = "Please include a project summary")
     private String summary;
     private String acceptanceCriteria;
     @Enumerated(EnumType.STRING)

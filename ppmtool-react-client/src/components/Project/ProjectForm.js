@@ -16,7 +16,7 @@ class ProjectForm extends Component {
     const errors = this.props.errors;
     const buttonLabel = this.props.buttonLabel;
 
-    const { projectName, projectIdentifier, description, startDate, endDate } = this.props.project;
+    const { name, uniqueLabel, description, startDate, endDate } = this.props.project;
     const mode = this.props.mode === 'update';
 
     return (
@@ -31,25 +31,25 @@ class ProjectForm extends Component {
                   <div className="form-group">
                     <input
                       type="text"
-                      className={classnames("form-control form-control-lg ", { "is-invalid": errors.projectName })}
+                      className={classnames("form-control form-control-lg ", { "is-invalid": errors.name })}
                       placeholder="Project Name"
-                      name="projectName"
-                      value={projectName}
+                      name="name"
+                      value={name}
                       onChange={this.onChange}
                     />
-                    <ProjectErrors errors={errors.projectName} />
+                    <ProjectErrors errors={errors.name} />
                   </div>
                   <div className="form-group">
                     <input
                       type="text"
-                      className={classnames("form-control form-control-lg ", { "is-invalid": errors.projectIdentifier })}
+                      className={classnames("form-control form-control-lg ", { "is-invalid": errors.uniqueLabel })}
                       placeholder="Unique Project ID"
-                      name="projectIdentifier"
-                      value={projectIdentifier}
+                      name="uniqueLabel"
+                      value={uniqueLabel}
                       onChange={this.onChange}
                       disabled={mode}
                     />
-                    <ProjectErrors errors={errors.projectIdentifier} />
+                    <ProjectErrors errors={errors.uniqueLabel} />
                   </div>
                   <div className="form-group">
                     <textarea

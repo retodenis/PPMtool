@@ -10,8 +10,8 @@ class UpdateProject extends Component {
 
     this.state = {
       id: "",
-      projectName: "",
-      projectIdentifier: "",
+      name: "",
+      uniqueLabel: "",
       description: "",
       startDate: "",
       endDate: "",
@@ -27,8 +27,8 @@ class UpdateProject extends Component {
     
     const {
       id,
-      projectName,
-      projectIdentifier,
+      name,
+      uniqueLabel,
       description,
       startDate,
       endDate
@@ -36,8 +36,8 @@ class UpdateProject extends Component {
 
     this.setState({
       id,
-      projectName,
-      projectIdentifier,
+      name,
+      uniqueLabel,
       description,
       startDate,
       endDate
@@ -58,8 +58,8 @@ class UpdateProject extends Component {
 
     const updateProject = {
       id: this.state.id,
-      projectName: this.state.projectName,
-      projectIdentifier: this.state.projectIdentifier,
+      name: this.state.name,
+      uniqueLabel: this.state.uniqueLabel,
       description: this.state.description,
       startDate: this.state.startDate,
       endDate: this.state.endDate

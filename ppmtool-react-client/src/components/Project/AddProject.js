@@ -9,8 +9,8 @@ class AddProject extends Component {
       super();
   
       this.state = {
-        projectName: "",
-        projectIdentifier: "",
+        name: "",
+        uniqueLabel: "",
         description: "",
         startDate: "",
         endDate: "",
@@ -31,8 +31,8 @@ class AddProject extends Component {
     onSubmit = e => {
       e.preventDefault();
       const newProject = {
-        projectName: this.state.projectName,
-        projectIdentifier: this.state.projectIdentifier,
+        name: this.state.name,
+        uniqueLabel: this.state.uniqueLabel,
         description: this.state.description,
         startDate: this.state.startDate,
         endDate: this.state.endDate

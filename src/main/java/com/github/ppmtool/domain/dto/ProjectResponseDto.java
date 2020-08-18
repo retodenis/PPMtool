@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ProjectResponseDto {
-    private String projectIdentifier;
+    private String uniqueLabel;
     private String message;
 }

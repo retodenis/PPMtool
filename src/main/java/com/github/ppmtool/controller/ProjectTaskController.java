@@ -1,6 +1,10 @@
 package com.github.ppmtool.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.ppmtool.domain.Project;
 import com.github.ppmtool.domain.ProjectTask;
+import com.github.ppmtool.domain.Views;
+import com.github.ppmtool.service.ProjectService;
 import com.github.ppmtool.service.ProjectTaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.Set;
 
 import static com.github.ppmtool.validation.ValidationHelper.getBadRequestErrors;
 
@@ -19,34 +25,34 @@ import static com.github.ppmtool.validation.ValidationHelper.getBadRequestErrors
 public class ProjectTaskController {
 
     private ProjectTaskService projectTaskService;
+    private ProjectService projectService;
 
-    @PostMapping("{projectIdentifier}")
+    @PostMapping("{projectLabel}")
     public ResponseEntity<?> addProject(
-            @PathVariable String projectIdentifier,
+            @PathVariable String projectLabel,
             @Valid @RequestBody ProjectTask projectTask,
             BindingResult bindingResult) {
 
         if(bindingResult.hasErrors())
             return getBadRequestErrors(bindingResult);
 
-        ProjectTask newProjectTask = projectTaskService.addProjectTask(projectIdentifier, projectTask);
+        ProjectTask newProjectTask = projectTaskService.addProjectTask(projectLabel, projectTask);
 
         return new ResponseEntity<>(newProjectTask, HttpStatus.CREATED);
     }
 
-    @GetMapping("{projectIdentifier}")
-    public ResponseEntity<Iterable<ProjectTask>> getProjectTasks(@PathVariable String projectIdentifier) {
+    @JsonView(Views.Tasks.class)
+    @GetMapping("{projectLabel}")
+    public ResponseEntity<Set<ProjectTask>> getProjectTasks(@PathVariable String projectLabel) {
         return new ResponseEntity<>
-                (projectTaskService.findProjectTasksById(projectIdentifier), HttpStatus.OK);
+                (projectService.findProjectByUniqueLabel(projectLabel).getPtTasks(), HttpStatus.OK);
     }
 
-    @GetMapping("{projectIdentifier}/{projectSequence}")
-    public ResponseEntity<ProjectTask> getProjectTaskBySequence(
-            @PathVariable String projectIdentifier,
-            @PathVariable String projectSequence) {
+    @GetMapping("{projectLabel}/{ptSeq}")
+    public ResponseEntity<ProjectTask> getProjectTaskBySeq(
+            @PathVariable String projectLabel,
+            @PathVariable String ptSeq) {
         return new ResponseEntity<>
-            (projectTaskService.findByProjectIdentifierAndProjectSequence(
-                    projectIdentifier,
-                    projectSequence), HttpStatus.OK);
+            (projectTaskService.findByProjectLabelAndSeq(projectLabel, ptSeq), HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package com.github.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -13,13 +14,14 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-@ToString
+@ToString(of = {"id", "summary"})
+@EqualsAndHashCode(of = {"id"})
 public class ProjectTask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(updatable = false, unique = true)
-    private String projectSequence;
+    private String ptSeq;
     @NotNull(message = "Must not be null")
     @NotBlank(message = "Please include a project summary")
     private String summary;
@@ -32,16 +34,13 @@ public class ProjectTask {
     private PTPriority ptPriority;
     private LocalDateTime dueDate;
     @Column(updatable = false)
-    private String projectIdentifier;
-    @Column(updatable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", updatable = false, nullable = false)
     @JsonIgnore
-    @ToString.Exclude
-    private Backlog backlog;
+    private Project project;
 
     @PostLoad
     private void postLoad() {

@@ -1,11 +1,12 @@
 package com.github.ppmtool.service;
 
-import com.github.ppmtool.domain.Backlog;
 import com.github.ppmtool.domain.Project;
 import com.github.ppmtool.exceptions.ProjectIdException;
 import com.github.ppmtool.repository.ProjectRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ProjectService {
@@ -16,28 +17,31 @@ public class ProjectService {
     }
 
     public Project saveOrUpdate(Project project) {
-        final String projectIdentifier = project.getProjectIdentifier().toUpperCase();
-        try {
-            project.setProjectIdentifier(projectIdentifier);
+        final String uniqueLabel = project.getUniqueLabel().toUpperCase();
 
-            if(project.getId() == null) {
-                Backlog backlog = new Backlog();
-                project.setBacklog(backlog);
-                backlog.setProject(project);
-                backlog.setProjectIdentifier(projectIdentifier);
+        if(project.getId() != null) {
+            Optional<Project> projectFromDb = repository.findById(project.getId());
+            String projectLabelFromDb = projectFromDb.get().getUniqueLabel();
+            if(!projectLabelFromDb.equals(uniqueLabel)) {
+                throw new ProjectIdException("Project label is not updatable {0}", projectLabelFromDb);
             }
+        }
+
+        try {
+            project.setUniqueLabel(uniqueLabel);
 
             return repository.save(project);
         } catch (DataIntegrityViolationException ex) {
-            throw new ProjectIdException("Project ID: " + projectIdentifier + " already exists");
+            throw new ProjectIdException("Project Label: " + uniqueLabel + " already exists");
         }
     }
 
-    public Project findProjectByIdentifier(String projectId) {
-        Project project = repository.findByProjectIdentifier(projectId.toUpperCase());
+    public Project findProjectByUniqueLabel(String uniqueLabel) {
+        final String uniqueLabelUpperCase = uniqueLabel.toUpperCase();
+        Project project = repository.findByUniqueLabel(uniqueLabelUpperCase);
 
         if(project == null) {
-            throw new ProjectIdException("Project ID: " + projectId.toUpperCase() + " does not exists");
+            throw new ProjectIdException("Project Label: " + uniqueLabelUpperCase + " does not exists");
         }
 
         return project;
@@ -47,11 +51,12 @@ public class ProjectService {
         return repository.findAll();
     }
 
-    public void deleteProjectById(String projectId) {
-        Project project = repository.findByProjectIdentifier(projectId);
+    public void deleteProjectByLabel(String uniqueLabel) {
+        final String uniqueLabelUpperCase = uniqueLabel.toUpperCase();
+        Project project = repository.findByUniqueLabel(uniqueLabel);
 
         if(project == null) {
-            throw new ProjectIdException("Cannot delete project : " + projectId.toUpperCase() + " does not exists");
+            throw new ProjectIdException("Cannot delete project : " + uniqueLabelUpperCase + " does not exists");
         }
         repository.delete(project);
     }

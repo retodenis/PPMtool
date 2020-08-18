@@ -10,17 +10,22 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ValidationHelper {
+
+    public static ResponseEntity<Map<String, List<ErrorDto>>> getBadRequestErrors
+            (BindingResult bindingResult) {
+        return new ResponseEntity<>
+                (ValidationHelper.getErrors(bindingResult), HttpStatus.BAD_REQUEST);
+    }
+
     private static Map<String, List<ErrorDto>> getErrors(BindingResult bindingResult) {
         return bindingResult.getFieldErrors()
                 .stream()
                 .collect(Collectors.groupingBy(
                         fieldError -> fieldError.getField(),
                         Collectors.mapping(
-                                fieldError -> new ErrorDto(fieldError.getDefaultMessage()), Collectors.toList()
+                                fieldError ->
+                                        new ErrorDto(fieldError.getDefaultMessage()),
+                                                     Collectors.toList()
                         )));
-    }
-
-    public static ResponseEntity<Map<String, List<ErrorDto>>> getBadRequestErrors(BindingResult bindingResult) {
-        return new ResponseEntity<>(ValidationHelper.getErrors(bindingResult), HttpStatus.BAD_REQUEST);
     }
 }

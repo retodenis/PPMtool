@@ -8,9 +8,12 @@ import com.github.ppmtool.repository.ProjectRepository;
 import com.github.ppmtool.repository.ProjectTaskRepository;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -53,7 +56,6 @@ public class ProjectTaskService {
 
                 projectTask.setProject(project);
                 projectTask.setPtSeq(projectLabel + "_" + ptSeq);
-                // TODO might not required projectTask.setProjectLabel(projectLabel);
 
                 if (projectTask.getPtPriority() == null) {
                     projectTask.setPtPriority(PTPriority.LOW);
@@ -73,7 +75,7 @@ public class ProjectTaskService {
         return null;
     }
 
-    public Iterable<ProjectTask> findProjectTasksByProjectLabel(String projectLabel) {
+    public Set<ProjectTask> findProjectTasksByProjectLabel(String projectLabel) {
 
         Project project = projectRepository.findByUniqueLabel(projectLabel);
 
@@ -84,11 +86,49 @@ public class ProjectTaskService {
         return projectTaskRepository.findByProject(project);
     }
 
-    public ProjectTask findByProjectLabelAndSeq
+    public ProjectTask findByProjectByLabelAndSeq
             (String projectLabel, String projectSeq) {
 
         Project project = projectRepository.findByUniqueLabel(projectLabel);
 
-        return projectTaskRepository.findByProjectAndPtSeq(project, projectSeq);
+        if(project == null)
+            throw new ProjectIdException("Project {0} does not exists", projectLabel);
+
+        ProjectTask ptTask = projectTaskRepository.findByProjectAndPtSeq(project, projectSeq);
+
+        if(ptTask == null)
+            throw new ProjectIdException("Project Task {0} does not exists", projectSeq);
+
+        return ptTask;
+    }
+
+    public ProjectTask updatePtTask(String projectLabel, ProjectTask projectTask) {
+
+        Project projectFromDb = projectRepository.findByUniqueLabel(projectLabel);
+
+        if(projectFromDb == null)
+            throw new ProjectIdException("Project {0} does not exists", projectLabel);
+
+        ProjectTask projectTaskFromDb =
+                projectTaskRepository.findById(
+                        projectTask.getId())
+                        .orElseThrow(() -> new ProjectIdException("Project Task {0} does not exists", String.valueOf(projectTask.getId())));
+
+        BeanUtils.copyProperties(projectTask, projectTaskFromDb, "id", "ptSeq");
+        return projectTaskRepository.save(projectTaskFromDb);
+    }
+
+    public void deleteByPtSeq(String projectLabel, String ptSeq) {
+        Project projectFromDb = projectRepository.findByUniqueLabel(projectLabel);
+
+        if(projectFromDb == null)
+            throw new ProjectIdException("Project {0} does not exists", projectLabel);
+
+        ProjectTask projectTask = projectTaskRepository.findByProjectAndPtSeq(projectFromDb, ptSeq);
+
+        if(projectTask == null)
+            throw new ProjectIdException("Project task {0} does not exists", ptSeq);
+
+        projectTaskRepository.deleteById(projectTask.getId());
     }
 }

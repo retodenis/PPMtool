@@ -62,5 +62,8 @@ public class ProjectTask {
     @PreUpdate
     private void onUpdate() {
         updatedAt = LocalDateTime.now();
+        if (priority > 0) {
+            this.ptPriority = PTPriority.of(priority);
+        }
     }
 }

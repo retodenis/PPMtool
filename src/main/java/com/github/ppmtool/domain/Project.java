@@ -1,7 +1,6 @@
 package com.github.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,14 +11,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
 @ToString(of = {"id", "name"})
 @EqualsAndHashCode(of = {"id"})
+@NamedEntityGraph(name="noJoins", includeAllAttributes = true)
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,9 +40,6 @@ public class Project {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;
     private Integer ptSeq = 0;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "project")
-    @JsonView(Views.Tasks.class)
-    private Set<ProjectTask> ptTasks = new HashSet<>();
 
     @PrePersist
     private void onCreate() {

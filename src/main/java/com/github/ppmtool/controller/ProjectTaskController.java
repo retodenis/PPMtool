@@ -1,8 +1,6 @@
 package com.github.ppmtool.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.github.ppmtool.domain.ProjectTask;
-import com.github.ppmtool.domain.Views;
 import com.github.ppmtool.service.ProjectTaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

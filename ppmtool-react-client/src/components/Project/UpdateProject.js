@@ -15,38 +15,40 @@ class UpdateProject extends Component {
       description: "",
       startDate: "",
       endDate: "",
-      errors: {}
+      errors: []
     };
 
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
-    }
-    
-    const {
-      id,
-      name,
-      uniqueLabel,
-      description,
-      startDate,
-      endDate
-    } = nextProps.project;
-
-    this.setState({
-      id,
-      name,
-      uniqueLabel,
-      description,
-      startDate,
-      endDate
-    });
   }
 
   componentDidMount() {
     const { id } = this.props.match.params;
     this.props.getProject(id, this.props.history);
+  }
+
+  componentDidUpdate(props, state) {
+    if(props.errors !== this.props.errors) {
+      this.setState({ errors: this.props.errors });
+    }
+
+    if(props.project !== this.props.project) {
+      const {
+        id,
+        name,
+        uniqueLabel,
+        description,
+        startDate,
+        endDate
+      } = this.props.project;
+  
+      this.setState({
+        id,
+        name,
+        uniqueLabel,
+        description,
+        startDate,
+        endDate
+      });
+    }
   }
 
   onChange = e => {
@@ -62,7 +64,8 @@ class UpdateProject extends Component {
       uniqueLabel: this.state.uniqueLabel,
       description: this.state.description,
       startDate: this.state.startDate,
-      endDate: this.state.endDate
+      endDate: this.state.endDate,
+      errors: {id: '', name: ''}
     };
     
     this.props.createProject(updateProject, this.props.history);

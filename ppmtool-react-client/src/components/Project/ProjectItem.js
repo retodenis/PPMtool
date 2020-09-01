@@ -3,6 +3,7 @@ import UpdateProjectButton from './UpdateProjectButton';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteProject } from '../../actions/projectActions';
+import { Link } from 'react-router-dom';
 
 class ProjectItem extends Component {
 
@@ -29,11 +30,11 @@ class ProjectItem extends Component {
                         </div>
                         <div className="col-md-4 d-none d-lg-block">
                             <ul className="list-group">
-                                <a href="#">
+                                <Link to={`/projectBoard/${uniqueLabel}`}>
                                     <li className="list-group-item board">
                                         <i className="fa fa-flag-checkered pr-1">Project Board </i>
                                     </li>
-                                </a>
+                                </Link>
                                 <UpdateProjectButton uniqueLabel={uniqueLabel} />
                                 <li className="list-group-item delete" onClick={() => this.onDeleteClick(uniqueLabel)}>
                                     <i className="fa fa-minus-circle pr-1">Delete Project</i>

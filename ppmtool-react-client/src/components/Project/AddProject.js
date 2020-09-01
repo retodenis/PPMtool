@@ -18,9 +18,9 @@ class AddProject extends Component {
       };
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (nextProps.errors) {
-        this.setState({ errors: nextProps.errors });
+    componentDidUpdate(props, state) {
+      if(props.errors !== this.props.errors) {
+        this.setState({errors: this.props.errors});
       }
     }
   
@@ -42,7 +42,7 @@ class AddProject extends Component {
   
     render() {
       const { errors } = this.state;
-  
+
       return (
         <ProjectForm 
           errors={errors}

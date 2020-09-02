@@ -14,7 +14,7 @@ class AddProject extends Component {
         description: "",
         startDate: "",
         endDate: "",
-        errors: {}
+        errors: []
       };
     }
 

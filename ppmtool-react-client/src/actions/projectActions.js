@@ -5,7 +5,7 @@ const PROJECTS_URL = '/api/project';
 
 export const createProject = (project, history) => async dispatch => {
     try {
-        const response = await axios.post(PROJECTS_URL, project);
+        await axios.post(PROJECTS_URL, project);
         history.push("/dashboard");
 
         dispatch({
@@ -35,13 +35,24 @@ export const getProjects = () => async dispatch => {
 
 }
 
-export const getProject = (id, history) => async dispatch => {
+/*export const getProject = (id, history) => async dispatch => {
     try {
         const response = await axios.get(`${PROJECTS_URL}/${id}`);
 
         dispatch({
             type: GET_PROJECT,
             payload: response.data
+        })
+    } catch (error) {
+        history.push('/dashboard');
+    }
+
+}*/
+export const getProject = (project, history) => async dispatch => {
+    try {
+        dispatch({
+            type: GET_PROJECT,
+            payload: project
         })
     } catch (error) {
         history.push('/dashboard');

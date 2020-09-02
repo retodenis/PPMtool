@@ -35,7 +35,7 @@ class ProjectItem extends Component {
                                         <i className="fa fa-flag-checkered pr-1">Project Board </i>
                                     </li>
                                 </Link>
-                                <UpdateProjectButton uniqueLabel={uniqueLabel} />
+                                <UpdateProjectButton project={this.props.project} uniqueLabel={uniqueLabel} />
                                 <li className="list-group-item delete" onClick={() => this.onDeleteClick(uniqueLabel)}>
                                     <i className="fa fa-minus-circle pr-1">Delete Project</i>
                                 </li>

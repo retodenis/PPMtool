@@ -9,23 +9,42 @@ class UpdateProject extends Component {
     super()
 
     this.state = {
-      id: "",
-      name: "",
-      uniqueLabel: "",
-      description: "",
-      startDate: "",
-      endDate: "",
+      id: '',
+      name: '',
+      uniqueLabel: '',
+      description: '',
+      startDate: '',
+      endDate: '',
       errors: []
     };
 
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params;
-    this.props.getProject(id, this.props.history);
+    if(this.props.location.project) {
+      this.props.getProject(this.props.location.project, this.props.history);
+    }
+
+    const {
+      id,
+      name,
+      uniqueLabel,
+      description,
+      startDate,
+      endDate
+    } = this.props.project;
+
+    this.setState({
+      id,
+      name,
+      uniqueLabel,
+      description,
+      startDate,
+      endDate
+    });
   }
 
-  componentDidUpdate(props, state) {
+  componentDidUpdate(props, prevState) {
     if(props.errors !== this.props.errors) {
       this.setState({ errors: this.props.errors });
     }
